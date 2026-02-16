@@ -1,0 +1,78 @@
+[project]
+name = "medie"
+version = "0.1.2"
+description = "MeCab's Double-Array trie reader"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+  {name = "Yukino Ikegami", email = "yknikgm@gmail.com"},
+]
+license = {file = "LICENSE"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Science/Research",
+    "Natural Language :: Japanese",
+    "Topic :: Text Processing",
+    "Development Status :: 3 - Alpha",
+]
+keywords = ["mecab", "trie", "nlp", "japanese"]
+
+[project.urls]
+Homepage = "https://github.com/ikegami-yukino/medie"
+Repository = "https://github.com/ikegami-yukino/medie.git"
+Issues = "https://github.com/ikegami-yukino/medie/issues"
+
+[build-system]
+requires = ["uv_build>=0.9.9,<0.14.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "build",
+    "pytest",
+    "ruff",
+    "twine",
+]
+
+[project.scripts]
+medie = "medie.__main__:main"
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+env_list = code_format, doc_format, 3.15t, 3.15, 3.14t, 3.14, 3.13t, 3.13, 3.12, 3.11, 3.10, 3.9, pypy-3.11, pypy-3.12
+parallel_show_output = true
+
+[env_run_base]
+description = "run unit tests"
+deps = pytest pytest-sugar
+commands = 
+    pytest tests/test_medie.py
+
+[env.code_format]
+description = "install ruff in a virtual environment and invoke it"
+deps = "ruff"
+skip_install = true
+commands = 
+    ruff check --select I src/medie/__init__.py
+    ruff check --select I src/medie/medie.py
+    ruff check --select I scripts/medie
+    ruff check --select I tests/test_medie.py
+
+[env.doc_format]
+description = "install readme-renderer in a virtual environment and invoke it"
+deps = "readme-renderer[md]"
+skip_install = true
+commands = 
+    python -m readme_renderer README.md -o /dev/null"
+"""
